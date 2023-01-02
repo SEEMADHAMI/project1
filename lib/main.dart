@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapp/pages/SignInPage.dart';
-import 'package:todoapp/pages/SignUpPage.dart';
+import 'package:todoapp/screens/SignInPage.dart';
+import 'package:todoapp/screens/SignUpPage.dart';
+import 'package:todoapp/screens/homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,20 +34,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SignUpPage(),
-      // home: Scaffold(
-      //   appBar: AppBar(
-      //     title: const Text('Firebase'),
-      //   ),
-      //   body: Center(
-      //     child: ElevatedButton(
-      //       onPressed: () {
-      //         signup();
-      //       },
-      //       child: const Text('Signup'),
-      //     ),
-      //   ),
-      // ),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return HomePage();
+            } else {
+              return SignInPage();
+            }
+          }),
     );
   }
 }
