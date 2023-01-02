@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:firebase_core/firebase_core.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  firebase_auth.FirebaseAuth firebaseAuth = firebase_auth.FirebaseAuth.instance;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Sign Up',
+                'Sign In',
                 style: TextStyle(
                     fontSize: 35,
                     color: Colors.white,
@@ -50,11 +45,11 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 15,
               ),
-              textItem("Email...", _emailController, false),
+              textItem("Email..."),
               SizedBox(
                 height: 15,
               ),
-              textItem("Password...", _passwordController, true),
+              textItem("Password..."),
               SizedBox(
                 height: 30,
               ),
@@ -66,17 +61,27 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "If you have already an Account?",
+                    "If you don't have  an Account?",
                     style: TextStyle(color: Colors.white, fontSize: 17),
                   ),
                   Text(
-                    'Login',
+                    'SignUp',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   )
                 ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Forgot password?',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               )
             ],
           ),
@@ -86,33 +91,20 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget colorButton() {
-    return InkWell(
-      onTap: () async {
-        try {
-          firebase_auth.UserCredential userCredential =
-              await firebaseAuth.createUserWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text);
-          print(userCredential.user?.email);
-        } catch (e) {
-          print(e);
-        }
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width - 90,
-        height: 60,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(colors: [
-              Color(0xfffd746c),
-              Color(0xffff9068),
-              Color(0xfffd746c),
-            ])),
-        child: Center(
-          child: Text(
-            'SignUp',
-            style: TextStyle(color: Colors.white, fontSize: 17),
-          ),
+    return Container(
+      width: MediaQuery.of(context).size.width - 90,
+      height: 60,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(colors: [
+            Color(0xfffd746c),
+            Color(0xffff9068),
+            Color(0xfffd746c),
+          ])),
+      child: Center(
+        child: Text(
+          'SignUp',
+          style: TextStyle(color: Colors.white, fontSize: 17),
         ),
       ),
     );
@@ -153,33 +145,21 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget textItem(
-      String labelText, TextEditingController controller, bool obscureText) {
+  Widget textItem(String labelText) {
     return Container(
       width: MediaQuery.of(context).size.width - 70,
       height: 55,
       child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        style: TextStyle(fontSize: 18, color: Colors.white),
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: TextStyle(fontSize: 18, color: Colors.white),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
-              width: 1.5,
-              color: Colors.amber,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
-              width: 1,
-              color: Colors.grey,
-            ),
-          ),
-        ),
+            labelText: labelText,
+            labelStyle: TextStyle(fontSize: 18, color: Colors.white),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(
+                width: 1,
+                color: Colors.grey,
+              ),
+            )),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:todoapp/pages/SignInPage.dart';
 import 'package:todoapp/pages/SignUpPage.dart';
 
 void main() async {
