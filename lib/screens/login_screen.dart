@@ -61,8 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Padding(
-                padding:
-                    const EdgeInsets.only(left: 24.0, right: 24.0, top: 48),
+                padding: const EdgeInsets.only(
+                    left: 24.0, right: 24.0, top: 30, bottom: 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -74,10 +74,42 @@ class _LoginScreenState extends State<LoginScreen> {
                     Form(
                       key: _formKey,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                         EmailTextForm(),
+                          TextFormField(
+                            controller: _emailTextController,
+                            focusNode: _focusEmail,
+                            validator: (value) => Validator.validateEmail(
+                              email: value,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Email",
+                              errorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
                           SizedBox(height: 8.0),
-                         PasswordTextForm(),
+                          TextFormField(
+                            controller: _passwordTextController,
+                            focusNode: _focusPassword,
+                            obscureText: true,
+                            validator: (value) => Validator.validatePassword(
+                              password: value,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Password",
+                              errorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
                           SizedBox(height: 24.0),
                           _isProcessing
                               ? CircularProgressIndicator()
@@ -136,29 +168,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                  child: Text("If you don't have an account?")),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => SignUpScreen(),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'SignUp',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, right: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(child: Text("Don't have an account?")),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => SignUpScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'SignUp',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           )
                         ],
                       ),
