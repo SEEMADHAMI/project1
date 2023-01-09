@@ -1,107 +1,44 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-
-import 'package:todoapp/screens/login_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:todoapp/screens/profile_screen.dart';
+import 'package:todoapp/screens/signup_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-final User user;
+  const HomeScreen({super.key});
 
-HomeScreen({required this.user});
-
-@override
-_HomeScreenState createState() => _HomeScreenState();
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-late User _currentUser;
-
-@override
-void initState() {
-  _currentUser = widget.user;
-  super.initState();
-}
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Colors.deepOrangeAccent,
-      title: Text('HomeScreen'),
-      centerTitle: true,
-    ),
-
-    body: WillPopScope(
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
       onWillPop: () async {
-        final logout = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: new Text('Are you sure?'),
-              content: new Text('Logout from this App'),
-              actionsAlignment: MainAxisAlignment.spaceBetween,
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Logout();
-                  },
-                  child: const Text('Yes'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: const Text('No'),
-                ),
-              ],
-            );
-          },
-        );
-        return logout!;
+        SystemNavigator.pop;
+        return false;
       },
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            
-            SizedBox(height: 16.0),
-            Text(
-              'EMAIL: ${_currentUser.email}',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
-                  ),
-                );
+      child: Scaffold(
+        
+        appBar: AppBar(
+          
+          centerTitle: true,
+          title: Text('Welcome to HomePage'),
+        ),
+        backgroundColor: Colors.white,
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+          child: TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()));
               },
-              child: const Text('Sign out'),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.redAccent),
-              ),
-            ),
-          ],
+              child: Text('SignOut')),
         ),
       ),
-    )
-
-  );
+    );
+  }
 }
-
-Future<dynamic> Logout() async {
-
-  await FirebaseAuth.instance.signOut();
-
-  Navigator.of(context).pushReplacement(
-    MaterialPageRoute(
-      builder: (context) => LoginScreen(),
-    ),
-  );
-}
-}
-

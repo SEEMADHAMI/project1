@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/screens/login_screen.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   User user;
 
@@ -31,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         leading: IconButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => HomeScreen(user: _currentUser)));
+                  builder: (context) => HomeScreen()));
             },
             icon: Icon(Icons.arrow_back)),
       ),

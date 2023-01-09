@@ -1,116 +1,116 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:todoapp/reusablecode/reusable.dart';
-import 'package:todoapp/screens/home_screen.dart';
-
-import 'package:todoapp/validator.dart';
-
-import '../firebase_auth.dart';
+import 'package:todoapp/screens/login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _registerFormKey = GlobalKey<FormState>();
+  bool loading = false;
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-  final _emailTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final _focusEmail = FocusNode();
-  final _focusPassword = FocusNode();
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
 
-  bool _isProcessing = false;
+  void signup() {
+    setState(() {
+      loading = true;
+    });
+
+    _auth
+        .createUserWithEmailAndPassword(
+            email: emailController.text.toString(),
+            password: passwordController.text.toString())
+        .then((value) {});
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _focusEmail.unfocus();
-        _focusPassword.unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.deepOrangeAccent,
-          title: Text('Create Account'),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Center(
-            child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("SignUp"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(hintText: 'Email'),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Enter Email";
+                          }
+                          return null;
+                        }),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(hintText: 'Password'),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Enter Password";
+                          }
+                          return null;
+                        }),
+                  ],
+                )),
+            SizedBox(
+              height: 30,
+            ),
+            RoundButton(
+              title: 'SignUp',
+              loading: loading,
+              onTap: (() {
+                if (_formKey.currentState!.validate()) {
+                  void signup;
+                }
+              }),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Form(
-                  key: _registerFormKey,
-                  child: Column(
-                    children: <Widget>[
-                      EmailTextForm(),
-                      SizedBox(height: 12.0),
-                      PasswordTextForm(),
-                      SizedBox(height: 32.0),
-                      _isProcessing
-                          ? CircularProgressIndicator()
-                          : Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      setState(() {
-                                        _isProcessing = true;
-                                      });
-
-                                      if (_registerFormKey.currentState!
-                                          .validate()) {
-                                        User? user = await FirebaseAuthHelper
-                                            .registerUsingEmailPassword(
-                                          email: _emailTextController.text,
-                                          password:
-                                              _passwordTextController.text,
-                                        );
-
-                                        setState(() {
-                                          _isProcessing = false;
-                                        });
-
-                                        if (user != null) {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  HomeScreen(user: user),
-                                            ),
-                                            ModalRoute.withName('/'),
-                                          );
-                                        }
-                                      } else {
-                                        setState(() {
-                                          _isProcessing = false;
-                                        });
-                                      }
-                                    },
-                                    child: Text(
-                                      'Sign up',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.deepOrangeAccent),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                    ],
-                  ),
-                )
+                Text("Already have an account"),
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
+                    },
+                    child: Text('Login'))
               ],
-            ),
-          ),
+            )
+          ],
         ),
       ),
     );

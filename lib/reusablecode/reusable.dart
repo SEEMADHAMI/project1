@@ -1,50 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/validator.dart';
 
+class RoundButton extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+  final bool loading;
+  const RoundButton(
+      {Key? key,
+      required this.title,
+      required this.onTap,
+      this.loading = false})
+      : super(key: key);
 
-final _emailTextController = TextEditingController();
-final _passwordTextController = TextEditingController();
-
-final _focusEmail = FocusNode();
-final _focusPassword = FocusNode();
-
-Widget EmailTextForm() {
-  return TextFormField(
-    controller: _emailTextController,
-    focusNode: _focusEmail,
-    validator: (value) => Validator.validateEmail(
-      email: value,
-    ),
-    decoration: InputDecoration(
-      hintText: "Email",
-      errorBorder: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(6.0),
-        borderSide: BorderSide(
-          color: Colors.red,
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(15)),
+        child: Center(
+          child: loading
+              ? CircularProgressIndicator()
+              : Text(
+                  title,
+                  style: TextStyle(color: Colors.black),
+                ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
-
-Widget PasswordTextForm() {
-  return TextFormField(
-    controller: _passwordTextController,
-    focusNode: _focusPassword,
-    obscureText: true,
-    validator: (value) => Validator.validatePassword(
-      password: value,
-    ),
-    decoration: InputDecoration(
-      hintText: "Password",
-      errorBorder: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(6.0),
-        borderSide: BorderSide(
-          color: Colors.red,
-        ),
-      ),
-    ),
-  );
-}
-
-
