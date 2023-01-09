@@ -16,7 +16,6 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("ProfilePage"),
-        
       ),
     );
   }
