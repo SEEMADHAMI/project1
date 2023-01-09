@@ -1,18 +1,39 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/screens/login_screen.dart';
+import 'package:todoapp/screens/updateprofile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  User user;
+
+  ProfileScreen({super.key, required this.user});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late User _currentUser;
+
+  @override
+  void initState() {
+    _currentUser = widget.user;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Profile Screen"),
+        title: const Text("Profile Screen"),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => HomeScreen(user: _currentUser)));
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: ListView(children: <Widget>[
         Padding(
@@ -20,52 +41,75 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 backgroundColor: Colors.transparent,
                 backgroundImage: NetworkImage(
                     "https://i.pinimg.com/736x/6b/e1/aa/6be1aa1902ce295f70e6a1d91587bd51.jpg"),
                 radius: 70,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Text(
-                "Nicky Jannos",
-                style: TextStyle(color: Colors.black87, fontSize: 16),
+                'Name: ${_currentUser.displayName}',
               ),
-              Text("nickjohn@gmail.com"),
-              SizedBox(
-                height: 15,
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                'Email: ${_currentUser.email}',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => EditProfile(
+                        user: _currentUser,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Edit Profile',
+                  style: TextStyle(fontSize: 14),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.grey),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
               ListView(
                 shrinkWrap: true,
                 children: <Widget>[
-                  ListTile(
+                  const ListTile(
                     title: Text("Your Favourite"),
                     leading: Icon(Icons.favorite),
                   ),
-                  ListTile(
+                  const ListTile(
                     title: Text("Payment"),
                     leading: Icon(Icons.payment),
                   ),
-                  ListTile(
+                  const ListTile(
                     title: Text("Settings"),
                     leading: Icon(Icons.settings),
                   ),
                   ListTile(
                     title: InkWell(
-                      onTap: () async {
-                        await FirebaseAuth.instance.signOut();
-
+                      onTap: () {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => LoginScreen(),
                           ),
                         );
                       },
-                      child: Text('Logout'),
+                      child: const Text('Logout'),
                     ),
-                    leading: Icon(Icons.logout),
+                    leading: const Icon(Icons.logout),
                   )
                 ],
               ),

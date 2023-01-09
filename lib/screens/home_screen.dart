@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:todoapp/screens/login_screen.dart';
 import 'package:todoapp/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final User user;
+  late final User user;
 
-  HomeScreen({required this.user});
+  HomeScreen({super.key, required this.user});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -26,18 +27,43 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.deepOrangeAccent,
-          title: Text('HomeScreen'),
+          backgroundColor: Colors.blue,
+          title: const Text('HomeScreen'),
           centerTitle: true,
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                      user: _currentUser,
+                    ),
+                  ),
+                );
+              },
+              child: const Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(
+                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png'),
+                ),
+              ),
+            ),
+          ],
         ),
         body: WillPopScope(
           onWillPop: () async {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen(user: _currentUser)));
             final logout = await showDialog<bool>(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: new Text('Are you sure?'),
-                  content: new Text('Logout from this App'),
+                  title: const Text('Are you sure?'),
+                  content: const Text('Logout from this App'),
                   actionsAlignment: MainAxisAlignment.spaceBetween,
                   actions: [
                     TextButton(
@@ -62,12 +88,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                Text(
+                  'NAME: ${_currentUser.displayName}',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
                 SizedBox(height: 16.0),
                 Text(
                   'EMAIL: ${_currentUser.email}',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
@@ -85,22 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => ProfileScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text('View Profile'),
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.redAccent),
-                  ),
-                ),
               ],
             ),
           ),
