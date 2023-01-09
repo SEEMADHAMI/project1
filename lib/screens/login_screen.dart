@@ -27,22 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
   }
 
-  void login() {
-    setState(() {
-      loading = true;
-    });
-    _auth
-        .signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text.toString())
-        .then((value) {});
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HomeScreen()));
-    setState(() {
-      loading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -97,7 +81,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 loading: false,
                 onTap: (() {
                   if (_formKey.currentState!.validate()) ;
-                  login();
+
+                  FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text)
+                      .then((value) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  });
                 }),
               ),
               SizedBox(

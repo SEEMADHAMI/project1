@@ -16,28 +16,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        SystemNavigator.pop;
-        return false;
-      },
-      child: Scaffold(
-        
-        appBar: AppBar(
-          
-          centerTitle: true,
-          title: Text('Welcome to HomePage'),
-        ),
-        backgroundColor: Colors.white,
-        body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-          child: TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
-              },
-              child: Text('SignOut')),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text('Welcome to HomePage'),
+      ),
+      backgroundColor: Colors.white,
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        child: TextButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignUpScreen()));
+            },
+            child: Text('SignOut')),
       ),
     );
   }

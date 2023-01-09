@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/reusablecode/reusable.dart';
+import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/screens/login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -23,21 +24,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
-  }
-
-  void signup() {
-    setState(() {
-      loading = true;
-    });
-
-    _auth
-        .createUserWithEmailAndPassword(
-            email: emailController.text.toString(),
-            password: passwordController.text.toString())
-        .then((value) {});
-    setState(() {
-      loading = false;
-    });
   }
 
   @override
@@ -89,7 +75,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               loading: loading,
               onTap: (() {
                 if (_formKey.currentState!.validate()) {
-                  void signup;
+                  FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text)
+                      .then((value) {
+                    print("New account SignedIn");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  }).onError((error, stackTrace) {
+                    print("Error ${error.toString()}");
+                  });
                 }
               }),
             ),
