@@ -48,9 +48,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   key: _registerFormKey,
                   child: Column(
                     children: <Widget>[
-                      EmailTextForm(),
+                       TextFormField(
+    controller: _emailTextController,
+    focusNode: _focusEmail,
+    validator: (value) => Validator.validateEmail(
+      email: value,
+    ),
+    decoration: InputDecoration(
+      hintText: "Email",
+      errorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.circular(6.0),
+        borderSide: BorderSide(
+          color: Colors.red,
+        ),
+      ),
+    ),
+  ),
                       SizedBox(height: 12.0),
-                      PasswordTextForm(),
+                     TextFormField(
+    controller: _passwordTextController,
+    focusNode: _focusPassword,
+    obscureText: true,
+    validator: (value) => Validator.validatePassword(
+      password: value,
+    ),
+    decoration: InputDecoration(
+      hintText: "Password",
+      errorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.circular(6.0),
+        borderSide: BorderSide(
+          color: Colors.red,
+        ),
+      ),
+    ),
+  ),
                       SizedBox(height: 32.0),
                       _isProcessing
                           ? CircularProgressIndicator()
