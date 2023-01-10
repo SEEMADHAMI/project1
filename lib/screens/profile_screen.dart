@@ -61,15 +61,17 @@ class _ProfilePageState extends State<ProfilePage> {
     return Center(
       child: Stack(
         children: <Widget>[
-          CircleAvatar(
+          const CircleAvatar(
             radius: 80,
-            backgroundImage: AssetImage(''),
+            backgroundImage: AssetImage('assets/Profile.jpg'),
           ),
           Positioned(
               bottom: 20,
               right: 20,
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  bottomSheet();
+                },
                 child: Icon(
                   Icons.camera_alt,
                   color: Colors.teal,
