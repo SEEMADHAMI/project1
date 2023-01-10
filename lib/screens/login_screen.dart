@@ -5,6 +5,8 @@ import 'package:todoapp/reusablecode/reusable.dart';
 import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/screens/signup_screen.dart';
 
+import '../firebase_helper.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -14,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool loading = false;
+
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -37,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Login"),
+          title: const Text("Login"),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -51,20 +54,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       TextFormField(
                           controller: emailController,
-                          decoration: InputDecoration(hintText: 'Email'),
+                          decoration: const InputDecoration(hintText: 'Email'),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Enter Email";
                             }
                             return null;
                           }),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       TextFormField(
                           controller: passwordController,
                           obscureText: true,
-                          decoration: InputDecoration(hintText: 'Password'),
+                          decoration:
+                              const InputDecoration(hintText: 'Password'),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Enter Password";
@@ -73,40 +77,49 @@ class _LoginScreenState extends State<LoginScreen> {
                           }),
                     ],
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               RoundButton(
                 title: 'Login',
                 loading: false,
                 onTap: (() {
-                  if (_formKey.currentState!.validate()) ;
-
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
+                  if (_formKey.currentState!.validate()) {}
+                  firebase
+                      .signInUsingEmailPassword(
                           email: emailController.text,
                           password: passwordController.text)
                       .then((value) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                    final text = "Welcome to homescreen";
+                    final snackBar = SnackBar(content: Text(text));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()));
+                  }).catchError((e) {
+                    // TODO ADD SNACKBAR HERE TO SHOW THE ERRORS
+                    final text = "Unable to login";
+                    final snackBar = SnackBar(content: Text(text));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   });
                 }),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don't have an account"),
+                  const Text("Don't have an account"),
                   TextButton(
                       onPressed: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignUpScreen()));
+                                builder: (context) => const SignUpScreen()));
                       },
-                      child: Text('SignUp'))
+                      child: const Text('SignUp'))
                 ],
               )
             ],
