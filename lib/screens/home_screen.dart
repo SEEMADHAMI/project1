@@ -25,12 +25,29 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.white,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-        child: TextButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignUpScreen()));
-            },
-            child: Text('SignOut')),
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+              },
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text("SignOut"),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextButton(
+                onPressed: (() {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()));
+                }),
+                child: Text('View Profile'))
+          ],
+        ),
       ),
     );
   }

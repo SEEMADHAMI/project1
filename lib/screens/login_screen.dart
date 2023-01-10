@@ -16,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool loading = false;
+
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -89,13 +90,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           email: emailController.text,
                           password: passwordController.text)
                       .then((value) {
+                    final text = "Welcome to homescreen";
+                    final snackBar = SnackBar(content: Text(text));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const HomeScreen()));
                   }).catchError((e) {
                     // TODO ADD SNACKBAR HERE TO SHOW THE ERRORS
-                    print(e);
+                    final text = "Unable to login";
+                    final snackBar = SnackBar(content: Text(text));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   });
                 }),
               ),
