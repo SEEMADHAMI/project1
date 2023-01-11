@@ -21,8 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final _auth = FirebaseAuth.instance;
-
   @override
   void dispose() {
     super.dispose();

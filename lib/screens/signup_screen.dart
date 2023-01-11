@@ -17,8 +17,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
   @override
   void dispose() {
     super.dispose();
@@ -73,9 +71,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             RoundButton(
               title: 'SignUp',
               loading: loading,
-              onTap: (() async{
+              onTap: (() async {
                 if (_formKey.currentState!.validate()) {
-                  User ? user  = await FirebaseAuth.instance
+                  User? user = await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                           email: emailController.text,
                           password: passwordController.text)
@@ -115,4 +113,3 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
-
